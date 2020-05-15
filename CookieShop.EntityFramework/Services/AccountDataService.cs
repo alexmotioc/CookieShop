@@ -16,9 +16,15 @@ namespace CookieShop.EntityFramework.Services
             _contextFactory = cookieShopDbContextFactory;
         }
 
-        public Task<Account> Create(Account entity)
+        public async Task<Account> Create(Account entity)
         {
-            throw new NotImplementedException();
+            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            {
+                var createdEntity = await context.Set<Account>().AddAsync(entity);
+                await context.SaveChangesAsync();
+
+                return createdEntity.Entity;
+            }
         }
 
         public Task<bool> Delete(int id)

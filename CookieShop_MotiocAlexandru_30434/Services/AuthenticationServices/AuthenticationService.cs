@@ -32,14 +32,11 @@ namespace CookieShop.Domain.Services.AuthenticationServices
             return storedAccount;
         }
 
-        public async Task<bool> Register(string email, string username, string password, string confirmPassword)
+        public async Task<Account> Register(string email, string username, string password, string confirmPassword)
         {
-            bool successFlag = false;
-
             if(password != confirmPassword)
             {
                 throw new Exception();
-
             }
 
             Account EmailAccount = await _dataService.GetByEmail(email);
@@ -73,10 +70,9 @@ namespace CookieShop.Domain.Services.AuthenticationServices
                     AccountHolder = user
                 };
 
-                await _dataService.Create(account);
+                return await _dataService.Create(account);
             }
-
-            return successFlag;
+            return null;
         }
     }
 }
