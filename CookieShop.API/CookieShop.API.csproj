@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CookieShop.EntityFramework\CookieShop.EntityFramework.csproj" />
+    <ProjectReference Include="..\CookieShop_MotiocAlexandru_30434\CookieShop.Domain.csproj" />
+  </ItemGroup>
+
+
+</Project>

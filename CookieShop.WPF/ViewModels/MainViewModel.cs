@@ -7,7 +7,7 @@ namespace CookieShop.WPF.ViewModels
 {
     public class MainViewModel : ViewModelBase 
     {
-        private INavigator Navigator;
+        public INavigator Navigator { get; set; }
 
         public MainViewModel(INavigator navigator)
         {
