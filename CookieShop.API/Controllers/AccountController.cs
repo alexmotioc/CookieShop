@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using CookieShop.API.Services;
 using CookieShop.Domain.Models;
 using CookieShop.Domain.Services;
 using CookieShop.Domain.Services.AuthenticationServices;
@@ -17,22 +18,38 @@ namespace CookieShop.API.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IAuthenticationService _authenticationService;
-        public AccountController(ILogger<AccountController> logger, IAuthenticationService authenticationService)
+
+        private readonly ITokenService _tokenService;
+
+        public AccountController(ILogger<AccountController> logger, IAuthenticationService authenticationService, ITokenService tokenService)
         {
             _logger = logger;
             _authenticationService = authenticationService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
-        public async Task<Account> Login([FromBody] LoginBody loginBody)
+        public async Task<string> Login([FromBody] LoginBody loginBody)
         {
-            return await _authenticationService.Login(loginBody.Email, loginBody.Password);
+            var Account = await _authenticationService.Login(loginBody.Email, loginBody.Password);
+            if (Account == null)
+            {
+                return null;
+
+            }
+            else
+            {
+                return _tokenService.CreateToken(Account.Id);
+            }
+
+
+
         }
 
         public class LoginBody
         {
-             public string Email { get; set; }
-             public string Password { get; set; }
+            public string Email { get; set; }
+            public string Password { get; set; }
         }
 
         [HttpPost("register")]

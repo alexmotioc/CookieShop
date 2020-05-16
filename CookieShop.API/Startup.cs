@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CookieShop.API.Services;
 using CookieShop.Domain.Services;
 using CookieShop.Domain.Services.AuthenticationServices;
 using CookieShop.EntityFramework;
@@ -36,6 +37,7 @@ namespace CookieShop.API
             services.AddSingleton(typeof(IDataService<>), typeof(GenericDataService<>));
             services.AddSingleton<IAccountService, AccountDataService>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddSingleton<ITokenService, TokenService>();
 
             services.AddSingleton<IAuthenticationService, AuthenticationService>();
 

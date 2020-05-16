@@ -24,11 +24,10 @@ namespace CookieShop.Domain.Services.AuthenticationServices
             Account storedAccount = await _dataService.GetByUsername(username);
             PasswordVerificationResult passwordResult = _passwordHasher.VerifyHashedPassword(storedAccount.AccountHolder.PasswordHash, password);
 
-            if(passwordResult != PasswordVerificationResult.Success)
+            if (passwordResult != PasswordVerificationResult.Success)
             {
-                throw new Exception();
+                return null;
             }
-
             return storedAccount;
         }
 
