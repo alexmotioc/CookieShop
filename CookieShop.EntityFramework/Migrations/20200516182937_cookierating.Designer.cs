@@ -4,14 +4,16 @@ using CookieShop.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CookieShop.EntityFramework.Migrations
 {
     [DbContext(typeof(CookieShopDbContext))]
-    partial class CookieShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200516182937_cookierating")]
+    partial class cookierating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,7 +83,7 @@ namespace CookieShop.EntityFramework.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CookieRatings");
+                    b.ToTable("CookieRating");
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>

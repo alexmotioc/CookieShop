@@ -11,7 +11,7 @@ namespace CookieShop.WPF.State.Authenticators
         Account CurrentAccount { get; }
         bool isLoggedIn { get; }
 
-        Task<bool> Register(string email, string username, string password, string confirmPassword);
+        Task<Account> Register(string email, string username, string password, string confirmPassword);
         Task<bool> Login(string username, string password);
 
         void Logout();

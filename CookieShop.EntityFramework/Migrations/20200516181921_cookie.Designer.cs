@@ -4,14 +4,16 @@ using CookieShop.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CookieShop.EntityFramework.Migrations
 {
     [DbContext(typeof(CookieShopDbContext))]
-    partial class CookieShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200516181921_cookie")]
+    partial class cookie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,8 +44,6 @@ namespace CookieShop.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AccountId");
-
                     b.Property<string>("Name");
 
                     b.Property<string>("Price");
@@ -54,34 +54,7 @@ namespace CookieShop.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
                     b.ToTable("Cookies");
-                });
-
-            modelBuilder.Entity("CookieShop.Domain.Models.CookieRating", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AccountId");
-
-                    b.Property<int?>("CookieId");
-
-                    b.Property<int>("Rating");
-
-                    b.Property<int?>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("CookieId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CookieRatings");
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>
@@ -129,28 +102,6 @@ namespace CookieShop.EntityFramework.Migrations
                     b.HasOne("CookieShop.Domain.Models.User", "AccountHolder")
                         .WithMany()
                         .HasForeignKey("AccountHolderId");
-                });
-
-            modelBuilder.Entity("CookieShop.Domain.Models.Cookie", b =>
-                {
-                    b.HasOne("CookieShop.Domain.Models.Account")
-                        .WithMany("FavoriteCookies")
-                        .HasForeignKey("AccountId");
-                });
-
-            modelBuilder.Entity("CookieShop.Domain.Models.CookieRating", b =>
-                {
-                    b.HasOne("CookieShop.Domain.Models.Account")
-                        .WithMany("Ratings")
-                        .HasForeignKey("AccountId");
-
-                    b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
-                        .WithMany()
-                        .HasForeignKey("CookieId");
-
-                    b.HasOne("CookieShop.Domain.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>

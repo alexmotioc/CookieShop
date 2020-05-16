@@ -11,25 +11,22 @@ namespace CookieShop.EntityFramework.Services
     public class AccountDataService : IAccountService
     {
         private readonly CookieShopDbContextFactory _contextFactory;
+        private readonly GenericDataService<Account> _dataService;
         public AccountDataService(CookieShopDbContextFactory cookieShopDbContextFactory)
         {
             _contextFactory = cookieShopDbContextFactory;
+            _dataService = new GenericDataService<Account>(_contextFactory); ;
         }
 
         public async Task<Account> Create(Account entity)
         {
-            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
-            {
-                var createdEntity = await context.Set<Account>().AddAsync(entity);
-                await context.SaveChangesAsync();
-
-                return createdEntity.Entity;
-            }
+            return await _dataService.Create(entity);
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            return await _dataService.Delete(id);
+
         }
 
         //private readonly NonQueryDataService<Account> _nonQueryDataService;

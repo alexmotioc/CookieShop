@@ -38,6 +38,7 @@ namespace CookieShop.API
             services.AddSingleton<IAccountService, AccountDataService>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<ITokenService, TokenService>();
+            services.AddSingleton<ICookieService, CookieDataService>();
 
             services.AddSingleton<IAuthenticationService, AuthenticationService>();
 

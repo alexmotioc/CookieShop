@@ -12,6 +12,8 @@ namespace CookieShop.Domain.Models
         public double Balance { get; set; }
 
         public IEnumerable<PurchaseHistory> PurchaseHistory { get; set; }
+        public IEnumerable<Cookie> FavoriteCookies { get; set; }
+        public IEnumerable<CookieRating> Ratings { get; set; }
 
 
     }

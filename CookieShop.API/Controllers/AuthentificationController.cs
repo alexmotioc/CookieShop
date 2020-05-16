@@ -14,14 +14,14 @@ namespace CookieShop.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AccountController : ControllerBase
+    public class AuthentificationController : ControllerBase
     {
-        private readonly ILogger<AccountController> _logger;
+        private readonly ILogger<AuthentificationController> _logger;
         private readonly IAuthenticationService _authenticationService;
 
         private readonly ITokenService _tokenService;
 
-        public AccountController(ILogger<AccountController> logger, IAuthenticationService authenticationService, ITokenService tokenService)
+        public AuthentificationController(ILogger<AuthentificationController> logger, IAuthenticationService authenticationService, ITokenService tokenService)
         {
             _logger = logger;
             _authenticationService = authenticationService;

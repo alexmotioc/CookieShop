@@ -43,9 +43,10 @@ namespace CookieShop.WPF.State.Authenticators
             CurrentAccount = null;
         }
 
-        public async Task<bool> Register(string email, string username, string password, string confirmPassword)
+        public async Task<Account> Register(string email, string username, string password, string confirmPassword)
         {
             return await _authenticationService.Register(email, username, password, confirmPassword);
         }
-    }
+
+     }
 }
