@@ -41,16 +41,24 @@ namespace CookieShop.EntityFramework.Services
 
         }
 
-        public async Task<IEnumerable<Cookie>> GetAll(string name, CookieType? type, int? price, int? sweeteners)
+        public async Task<IEnumerable<Cookie>> GetAll(string name, CookieType? type, int? price, int? sweeteners, int? rating)
         {
             using (CookieShopDbContext context = _contextFactory.CreateDbContext())
             {
-                IEnumerable<Cookie> entities = await context.Set<Cookie>()
+                IEnumerable<Cookie> entities = (await context.Set<Cookie>()
                     .Include((a) => a.Ratings)
                     
-                    .Where(cookie => (name == null ||name == string.Empty || cookie.Name.Contains(name)) 
-                    && (type == null || cookie.Type == type) && (price == null || cookie.Price == price) && (sweeteners == null || cookie.Sweeteners == sweeteners))
-                    .ToListAsync();
+                    .Where(cookie => 
+                    (name == null ||name == string.Empty || cookie.Name.Contains(name)) 
+                    && (type == null || cookie.Type == type) 
+                    && (price == null || cookie.Price == price) 
+                    && (sweeteners == null || cookie.Sweeteners == sweeteners)
+                    
+                    )
+                    .ToListAsync())
+                    .Where(cookie => (rating == null || Math.Round(cookie.RatingAvg) == rating))
+                    .ToList()
+                    ;
 
                 return entities;
             }

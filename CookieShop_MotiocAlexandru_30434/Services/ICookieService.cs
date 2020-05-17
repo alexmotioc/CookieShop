@@ -9,7 +9,7 @@ namespace CookieShop.EntityFramework.Services
 {
     public interface ICookieService : IDataService<Cookie>
     {
-        public  Task<IEnumerable<Cookie>> GetAll(string name, CookieType? type, int? price, int? sweeteners);
+        public  Task<IEnumerable<Cookie>> GetAll(string name, CookieType? type, int? price, int? sweeteners, int? rating);
         Task<CookieRating> AddRatings(int v, int cookieId, int rating);
     }
 }

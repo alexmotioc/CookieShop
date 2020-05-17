@@ -35,7 +35,7 @@ namespace CookieShop.API.Controllers
         [HttpGet()]
         public async Task<IEnumerable<Cookie>> GetAll([FromQuery]GetCookieRequest loginBody)
         {
-            var CookieList = await _cookieService.GetAll(loginBody.Name, loginBody.Type, loginBody.Price, loginBody.Sweeteners);
+            var CookieList = await _cookieService.GetAll(loginBody.Name, loginBody.Type, loginBody.Price, loginBody.Sweeteners,loginBody.Rating);
             //var model = _mapper.Map<IList<CookieResponse>>(CookieList);
 
             return CookieList;
@@ -50,6 +50,7 @@ namespace CookieShop.API.Controllers
             public CookieType? Type { get; set; }
             public int? Price { get; set; }
             public int? Sweeteners { get; set; }
+            public int? Rating { get; set; }
         }
 
         [HttpPost()]
