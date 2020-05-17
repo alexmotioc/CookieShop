@@ -10,5 +10,6 @@ namespace CookieShop.Domain.Services
     {
         Task<Account> GetByUsername(string username);
         Task<Account> GetByEmail(string email);
+        Task<Account> AddToFavorites(int accountid, Cookie cookie);
     }
 }

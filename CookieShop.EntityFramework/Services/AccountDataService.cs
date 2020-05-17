@@ -1,8 +1,11 @@
 ﻿using CookieShop.Domain.Models;
 using CookieShop.Domain.Services;
+using CookieShop.EntityFramework.Migrations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -102,6 +105,20 @@ namespace CookieShop.EntityFramework.Services
         //{
         //    return await _nonQueryDataService.Update(id, entity);
         //}
-
+         public async Task<Account> AddToFavorites(int accountid, Cookie cookie)
+        {
+            var favoriteCookie = new FavoriteCookies() {Cookie = cookie};
+            
+            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            {
+                Account entity = await context.Accounts
+                   
+                    .Include(a => a.FavoriteCookies)
+                    .FirstOrDefaultAsync((e) => e.Id == accountid);
+                entity.FavoriteCookies.Add(favoriteCookie);
+                context.SaveChanges();
+                return entity;
+            }
+        }
     }
 }

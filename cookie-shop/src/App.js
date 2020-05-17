@@ -1,14 +1,22 @@
 import React from 'react';
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCookieBite, faUserNinja } from '@fortawesome/free-solid-svg-icons'
 import 'bootstrap/dist/css/bootstrap.css'
 import CookiesPage from './components/CookiesPage';
+import HomePage from './components/HomePage'
+import FavoritePage from './components/FavoritePage'
+import CartPage from './components/CartPage'
+import LoginPage from './components/LoginPage'
+import RegisterPage from './components/RegisterPage'
+
 
 function App() {
   return (
     <div className="App">
+       <Router>
       <header className="App-header">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,16 +29,16 @@ function App() {
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Cookies</a>
+                <a class="nav-link" href="/cookies">Cookies</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Favorites</a>
+                <a class="nav-link" href="/favorites">Favorites</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Cart</a>
+                <a class="nav-link" href="/cart">Cart</a>
               </li>
             </ul>
             <button className="login btn btn-primary">  User
@@ -41,8 +49,14 @@ function App() {
         </nav>
       </header>
       <div className="content">
-        <CookiesPage></CookiesPage>
+      <Route exact path="/" component={HomePage} />
+        <Route path="/cookies" component={CookiesPage} />
+        <Route path='/favorites' component={FavoritePage}/>
+        <Route path='/cart' component={CartPage}/>
+        <Route path='/login' component={LoginPage}/>
+        <Route path='/register' component={RegisterPage}/>
       </div>
+      </Router>
     </div>
   );
 }

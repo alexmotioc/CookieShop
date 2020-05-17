@@ -14,6 +14,7 @@ namespace CookieShop.EntityFramework
         public DbSet<PurchaseHistory> AssetTransactions { get; set; }
         public DbSet<Cookie> Cookies { get; set; }
         public DbSet<CookieRating> CookieRatings { get; set; }
+        public DbSet<FavoriteCookies> FavoriteCookies { get; set; }
 
         public CookieShopDbContext (DbContextOptions options) : base(options) { }
 

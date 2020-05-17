@@ -31,6 +31,13 @@ namespace CookieShop.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+            {
+                builder
+                    .WithOrigins("http://localhost:3000", "*")
+                    .AllowAnyHeader().AllowCredentials()
+                    .AllowAnyMethod();
+            }));
             services.AddControllers();
 
             services.AddSingleton<CookieShopDbContextFactory>();
@@ -59,7 +66,7 @@ namespace CookieShop.API
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
-
+            app.UseCors("ApiCorsPolicy");
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
