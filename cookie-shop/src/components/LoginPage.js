@@ -5,12 +5,17 @@ import { Card, Logo, Form, Input, Button } from './AuthPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCookieBite } from '@fortawesome/free-solid-svg-icons'
 import sendDetailsToServer from "../services/sendDetailsToServer";
+import axios from 'axios';
+import { useAuth } from "../context/authcontext"
 
 const LoginPage = () => {
     const [state, setState] = useState({
         email: "",
         password: ""
     })
+    const [isLoggedIn, setLoggedIn] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const { setAuthTokens } = useAuth();
     const handleChange = (e) => {
         const { id, value } = e.target
         setState(prevState => ({
@@ -23,11 +28,23 @@ const LoginPage = () => {
             const payload={
                 "email":state.email,
                 "password":state.password,
+
             }
             const url = 'http://localhost:52741/Authentification/login';
-            sendDetailsToServer(url, payload);
+            axios.post("http://localhost:52741/Authentification/login", payload
+     ).then(result => {
+      if (result.status === 200) {
+        setAuthTokens(result.data);
+        setLoggedIn(true);
+      } else {
+        setIsError(true);
+      }
+    }).catch(e => {
+      setIsError(true);
+    });
+  }
         }
-    }
+
     return (
         <div className="form-group col-12 col-lg-4">
             {/* ... */}
@@ -54,8 +71,10 @@ const LoginPage = () => {
             >
                 Login
           </button>
+          <Link to="/register">Don't have an account?</Link>
+        { isError &&<div>The username or password provided were incorrect!</div> }
         </div>
     )
-}
+    }
 
 export default LoginPage

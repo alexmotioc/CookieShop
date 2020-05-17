@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace CookieShop.Domain.Models
 {
     public class Cookie :DomainObject
     {
         public string Name { get; set; }
-        public cookieType Type { get; set; }
+        public CookieType Type { get; set; }
         public int Price { get; set; }
         public int Sweeteners { get; set; }
         public IList<CookieRating> Ratings { get; set; }
@@ -17,7 +19,9 @@ namespace CookieShop.Domain.Models
 
     }
 
-    public enum cookieType
+    //[JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum CookieType
         {
         Chocolate,
         Vanilla,

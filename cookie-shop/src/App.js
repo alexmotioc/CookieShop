@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
@@ -11,12 +11,23 @@ import FavoritePage from './components/FavoritePage'
 import CartPage from './components/CartPage'
 import LoginPage from './components/LoginPage'
 import RegisterPage from './components/RegisterPage'
+import { AuthContext } from "./context/authcontext";
 
 
 function App() {
+  const existingTokens = JSON.parse(localStorage.getItem("tokens"));
+  const [authTokens, setAuthTokens] = useState(existingTokens);
+
+  const setTokens = (data) => {
+    localStorage.setItem("tokens", JSON.stringify(data));
+    setAuthTokens(data);
+  }
+
   return (
+    
     <div className="App">
-       <Router>
+      <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+       <Router>     
       <header className="App-header">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -57,6 +68,7 @@ function App() {
         <Route path='/register' component={RegisterPage}/>
       </div>
       </Router>
+      </AuthContext.Provider>
     </div>
   );
 }

@@ -41,7 +41,7 @@ namespace CookieShop.EntityFramework.Services
 
         }
 
-        public async Task<IEnumerable<Cookie>> GetAll(string name, cookieType? type, int? price, int? sweeteners)
+        public async Task<IEnumerable<Cookie>> GetAll(string name, CookieType? type, int? price, int? sweeteners)
         {
             using (CookieShopDbContext context = _contextFactory.CreateDbContext())
             {

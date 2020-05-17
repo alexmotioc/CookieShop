@@ -42,7 +42,7 @@ namespace CookieShop.API.Controllers
         public class GetCookieRequest
         {
             public string Name { get; set; }
-            public cookieType? Type { get; set; }
+            public CookieType? Type { get; set; }
             public int? Price { get; set; }
             public int? Sweeteners { get; set; }
         }
@@ -63,7 +63,7 @@ namespace CookieShop.API.Controllers
         public class CreateCookieRequest
         {
             public string Name { get; set; }
-            public cookieType Type { get; set; }
+            public CookieType Type { get; set; }
             public int Price { get; set; }
             public int Sweeteners { get; set; }
         }

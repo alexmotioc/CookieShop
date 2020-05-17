@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CookieShop.API.Services;
 using CookieShop.Domain.Services;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 namespace CookieShop.API
 {
@@ -38,7 +40,12 @@ namespace CookieShop.API
                     .AllowAnyHeader().AllowCredentials()
                     .AllowAnyMethod();
             }));
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+
+
 
             services.AddSingleton<CookieShopDbContextFactory>();
             services.AddSingleton(typeof(IDataService<>), typeof(GenericDataService<>));
