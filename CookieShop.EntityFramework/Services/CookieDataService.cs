@@ -47,8 +47,9 @@ namespace CookieShop.EntityFramework.Services
             {
                 IEnumerable<Cookie> entities = await context.Set<Cookie>()
                     .Include((a) => a.Ratings)
-
-                    .Where(cookie => (name == null || cookie.Name == name) && (type == null || cookie.Type == type) && (price == null || cookie.Price == price) && (sweeteners == null || cookie.Sweeteners == sweeteners))
+                    
+                    .Where(cookie => (name == null ||name == string.Empty || cookie.Name.Contains(name)) 
+                    && (type == null || cookie.Type == type) && (price == null || cookie.Price == price) && (sweeteners == null || cookie.Sweeteners == sweeteners))
                     .ToListAsync();
 
                 return entities;

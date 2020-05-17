@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios';
 import ReactStars from 'react-stars'
 const CookieCard = ({ cookie }) => {
+    
     const { id, name, type, price, sweeteners,ratingAvg} = cookie;
     const ratingChanged = (newRating) => {
         axios.post("http://localhost:52741/Cookie/rate", 
