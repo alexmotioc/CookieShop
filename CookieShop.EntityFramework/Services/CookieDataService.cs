@@ -46,6 +46,8 @@ namespace CookieShop.EntityFramework.Services
             using (CookieShopDbContext context = _contextFactory.CreateDbContext())
             {
                 IEnumerable<Cookie> entities = await context.Set<Cookie>()
+                    .Include((a) => a.Ratings)
+
                     .Where(cookie => (name == null || cookie.Name == name) && (type == null || cookie.Type == type) && (price == null || cookie.Price == price) && (sweeteners == null || cookie.Sweeteners == sweeteners))
                     .ToListAsync();
 
@@ -54,7 +56,7 @@ namespace CookieShop.EntityFramework.Services
         }
         public async Task<CookieRating> AddRatings(int userId, int cookieId, int rating)
         {
-            var cookieRating = new CookieRating() { CookieID = cookieId, UserID = userId, Rating = rating };
+            var cookieRating = new CookieRating() { CookieID = cookieId, UserID = userId, Rating = rating};
 
             using (CookieShopDbContext context = _contextFactory.CreateDbContext())
             {
