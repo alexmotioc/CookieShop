@@ -10,9 +10,9 @@ namespace CookieShop.Domain.Models
 
         public bool IsPurchase { get; set; }
 
-        public Stock Stock { get; set; }
+        public Cookie Cookie { get; set; }
 
-        public int Shares { get; set; }
+        public int Amount { get; set; }
 
         public DateTime DateProcessed { get; set; }
     }

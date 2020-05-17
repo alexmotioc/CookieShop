@@ -12,7 +12,9 @@ const CookiesPage = () => {
     
     return data.map(cookie => {
         return (
+            <div className="d-flex flex-row">
          <CookieCard cookie={cookie}></CookieCard>
+         </div>
         )
       })
     }

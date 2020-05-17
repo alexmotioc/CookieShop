@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CookieShop.EntityFramework.Migrations
 {
     [DbContext(typeof(CookieShopDbContext))]
-    [Migration("20200516182937_cookierating")]
-    partial class cookierating
+    [Migration("20200517175319_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,46 +44,52 @@ namespace CookieShop.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AccountId");
-
                     b.Property<string>("Name");
 
-                    b.Property<string>("Price");
+                    b.Property<int>("Price");
 
-                    b.Property<string>("Sweeteners");
+                    b.Property<int>("StockID");
 
-                    b.Property<string>("Type");
+                    b.Property<int>("Sweeteners");
+
+                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("StockID")
+                        .IsUnique();
 
                     b.ToTable("Cookies");
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.CookieRating", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("UserID");
 
-                    b.Property<int?>("AccountId");
+                    b.Property<int>("CookieID");
 
-                    b.Property<int?>("CookieId");
+                    b.Property<int>("Id");
 
                     b.Property<int>("Rating");
 
-                    b.Property<int?>("UserId");
+                    b.HasKey("UserID", "CookieID");
 
-                    b.HasKey("Id");
+                    b.HasAlternateKey("CookieID", "UserID");
 
-                    b.HasIndex("AccountId");
+                    b.ToTable("CookieRatings");
+                });
 
-                    b.HasIndex("CookieId");
+            modelBuilder.Entity("CookieShop.Domain.Models.FavoriteCookies", b =>
+                {
+                    b.Property<int>("AccountID");
 
-                    b.HasIndex("UserId");
+                    b.Property<int>("CookieID");
 
-                    b.ToTable("CookieRating");
+                    b.HasKey("AccountID", "CookieID");
+
+                    b.HasIndex("CookieID");
+
+                    b.ToTable("FavoriteCookies");
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>
@@ -94,17 +100,34 @@ namespace CookieShop.EntityFramework.Migrations
 
                     b.Property<int?>("AccountId");
 
+                    b.Property<int>("Amount");
+
+                    b.Property<int?>("CookieId");
+
                     b.Property<DateTime>("DateProcessed");
 
                     b.Property<bool>("IsPurchase");
-
-                    b.Property<int>("Shares");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
+                    b.HasIndex("CookieId");
+
                     b.ToTable("AssetTransactions");
+                });
+
+            modelBuilder.Entity("CookieShop.Domain.Models.Stock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Stocks");
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.User", b =>
@@ -135,24 +158,36 @@ namespace CookieShop.EntityFramework.Migrations
 
             modelBuilder.Entity("CookieShop.Domain.Models.Cookie", b =>
                 {
-                    b.HasOne("CookieShop.Domain.Models.Account")
-                        .WithMany("FavoriteCookies")
-                        .HasForeignKey("AccountId");
+                    b.HasOne("CookieShop.Domain.Models.Stock", "Stock")
+                        .WithOne("Cookie")
+                        .HasForeignKey("CookieShop.Domain.Models.Cookie", "StockID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.CookieRating", b =>
                 {
-                    b.HasOne("CookieShop.Domain.Models.Account")
+                    b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
                         .WithMany("Ratings")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("CookieID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CookieShop.Domain.Models.Account", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CookieShop.Domain.Models.FavoriteCookies", b =>
+                {
+                    b.HasOne("CookieShop.Domain.Models.Account", "Account")
+                        .WithMany("FavoriteCookies")
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
-                        .WithMany()
-                        .HasForeignKey("CookieId");
-
-                    b.HasOne("CookieShop.Domain.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithMany("AccountsIsFavouredBy")
+                        .HasForeignKey("CookieID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>
@@ -161,25 +196,9 @@ namespace CookieShop.EntityFramework.Migrations
                         .WithMany("PurchaseHistory")
                         .HasForeignKey("AccountId");
 
-                    b.OwnsOne("CookieShop.Domain.Models.Stock", "Stock", b1 =>
-                        {
-                            b1.Property<int>("PurchaseHistoryId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<double>("PricePerShare");
-
-                            b1.Property<string>("Symbol");
-
-                            b1.HasKey("PurchaseHistoryId");
-
-                            b1.ToTable("AssetTransactions");
-
-                            b1.HasOne("CookieShop.Domain.Models.PurchaseHistory")
-                                .WithOne("Stock")
-                                .HasForeignKey("CookieShop.Domain.Models.Stock", "PurchaseHistoryId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
+                    b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
+                        .WithMany()
+                        .HasForeignKey("CookieId");
                 });
 #pragma warning restore 612, 618
         }

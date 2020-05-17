@@ -14,183 +14,190 @@ namespace CookieShop.EntityFramework.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            //modelBuilder
-            //    .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
-            //    .HasAnnotation("Relational:MaxIdentifierLength", 128)
-            //    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+            modelBuilder
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.Account", b =>
-            //    {
-            //        b.Property<int>("Id")
-            //            .ValueGeneratedOnAdd()
-            //            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+            modelBuilder.Entity("CookieShop.Domain.Models.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            //        b.Property<int?>("AccountHolderId");
+                    b.Property<int?>("AccountHolderId");
 
-            //        b.Property<double>("Balance");
+                    b.Property<double>("Balance");
 
-            //        b.HasKey("Id");
+                    b.HasKey("Id");
 
-            //        b.HasIndex("AccountHolderId");
+                    b.HasIndex("AccountHolderId");
 
-            //        b.ToTable("Accounts");
-            //    });
+                    b.ToTable("Accounts");
+                });
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.Cookie", b =>
-            //    {
-            //        b.Property<int>("Id")
-            //            .ValueGeneratedOnAdd()
-            //            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+            modelBuilder.Entity("CookieShop.Domain.Models.Cookie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            //        b.Property<string>("Name");
+                    b.Property<string>("Name");
 
-            //        b.Property<int>("Price");
+                    b.Property<int>("Price");
 
-            //        b.Property<int>("Sweeteners");
+                    b.Property<int>("StockID");
 
-            //        b.Property<int>("Type");
+                    b.Property<int>("Sweeteners");
 
-            //        b.HasKey("Id");
+                    b.Property<int>("Type");
 
-            //        b.ToTable("Cookies");
-            //    });
+                    b.HasKey("Id");
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.CookieRating", b =>
-            //    {
-            //        b.Property<int>("CookieID")
-            //            .ValueGeneratedOnAdd()
-            //            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.HasIndex("StockID")
+                        .IsUnique();
 
-            //        b.Property<int?>("CookieId");
+                    b.ToTable("Cookies");
+                });
 
-            //        b.Property<int>("Id");
+            modelBuilder.Entity("CookieShop.Domain.Models.CookieRating", b =>
+                {
+                    b.Property<int>("UserID");
 
-            //        b.Property<int>("Rating");
+                    b.Property<int>("CookieID");
 
-            //        b.HasKey("CookieID");
+                    b.Property<int>("Id");
 
-            //        b.HasIndex("CookieId");
+                    b.Property<int>("Rating");
 
-            //        b.HasIndex("Id");
+                    b.HasKey("UserID", "CookieID");
 
-            //        b.ToTable("CookieRatings");
-            //    });
+                    b.HasAlternateKey("CookieID", "UserID");
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.FavoriteCookies", b =>
-            //    {
-            //        b.Property<int>("CookieID")
-            //            .ValueGeneratedOnAdd()
-            //            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.ToTable("CookieRatings");
+                });
 
-            //        b.Property<int?>("AccountId");
+            modelBuilder.Entity("CookieShop.Domain.Models.FavoriteCookies", b =>
+                {
+                    b.Property<int>("AccountID");
 
-            //        b.Property<int?>("CookieId");
+                    b.Property<int>("CookieID");
 
-            //        b.HasKey("CookieID");
+                    b.HasKey("AccountID", "CookieID");
 
-            //        b.HasIndex("AccountId");
+                    b.HasIndex("CookieID");
 
-            //        b.HasIndex("CookieId");
+                    b.ToTable("FavoriteCookies");
+                });
 
-            //        b.ToTable("FavoriteCookies");
-            //    });
+            modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>
-            //    {
-            //        b.Property<int>("Id")
-            //            .ValueGeneratedOnAdd()
-            //            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int?>("AccountId");
 
-            //        b.Property<int?>("AccountId");
+                    b.Property<int>("Amount");
 
-            //        b.Property<DateTime>("DateProcessed");
+                    b.Property<int?>("CookieId");
 
-            //        b.Property<bool>("IsPurchase");
+                    b.Property<DateTime>("DateProcessed");
 
-            //        b.Property<int>("Shares");
+                    b.Property<bool>("IsPurchase");
 
-            //        b.HasKey("Id");
+                    b.HasKey("Id");
 
-            //        b.HasIndex("AccountId");
+                    b.HasIndex("AccountId");
 
-            //        b.ToTable("AssetTransactions");
-            //    });
+                    b.HasIndex("CookieId");
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.User", b =>
-            //    {
-            //        b.Property<int>("Id")
-            //            .ValueGeneratedOnAdd()
-            //            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.ToTable("AssetTransactions");
+                });
 
-            //        b.Property<DateTime>("DateJoined");
+            modelBuilder.Entity("CookieShop.Domain.Models.Stock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            //        b.Property<string>("Email");
+                    b.Property<int>("Amount");
 
-            //        b.Property<string>("PasswordHash");
+                    b.HasKey("Id");
 
-            //        b.Property<string>("Username");
+                    b.ToTable("Stocks");
+                });
 
-            //        b.HasKey("Id");
+            modelBuilder.Entity("CookieShop.Domain.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            //        b.ToTable("Users");
-            //    });
+                    b.Property<DateTime>("DateJoined");
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.Account", b =>
-            //    {
-            //        b.HasOne("CookieShop.Domain.Models.User", "AccountHolder")
-            //            .WithMany()
-            //            .HasForeignKey("AccountHolderId");
-            //    });
+                    b.Property<string>("Email");
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.CookieRating", b =>
-            //    {
-            //        b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
-            //            .WithMany("Ratings")
-            //            .HasForeignKey("CookieId");
+                    b.Property<string>("PasswordHash");
 
-            //        b.HasOne("CookieShop.Domain.Models.Account", "User")
-            //            .WithMany("Ratings")
-            //            .HasForeignKey("Id")
-            //            .OnDelete(DeleteBehavior.Cascade);
-            //    });
+                    b.Property<string>("Username");
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.FavoriteCookies", b =>
-            //    {
-            //        b.HasOne("CookieShop.Domain.Models.Account")
-            //            .WithMany("FavoriteCookies")
-            //            .HasForeignKey("AccountId");
+                    b.HasKey("Id");
 
-            //        b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
-            //            .WithMany()
-            //            .HasForeignKey("CookieId");
-            //    });
+                    b.ToTable("Users");
+                });
 
-            //modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>
-            //    {
-            //        b.HasOne("CookieShop.Domain.Models.Account", "Account")
-            //            .WithMany("PurchaseHistory")
-            //            .HasForeignKey("AccountId");
+            modelBuilder.Entity("CookieShop.Domain.Models.Account", b =>
+                {
+                    b.HasOne("CookieShop.Domain.Models.User", "AccountHolder")
+                        .WithMany()
+                        .HasForeignKey("AccountHolderId");
+                });
 
-            //        b.OwnsOne("CookieShop.Domain.Models.Stock", "Stock", b1 =>
-            //            {
-            //                b1.Property<int>("PurchaseHistoryId")
-            //                    .ValueGeneratedOnAdd()
-            //                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+            modelBuilder.Entity("CookieShop.Domain.Models.Cookie", b =>
+                {
+                    b.HasOne("CookieShop.Domain.Models.Stock", "Stock")
+                        .WithOne("Cookie")
+                        .HasForeignKey("CookieShop.Domain.Models.Cookie", "StockID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
 
-            //                b1.Property<double>("PricePerShare");
+            modelBuilder.Entity("CookieShop.Domain.Models.CookieRating", b =>
+                {
+                    b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
+                        .WithMany("Ratings")
+                        .HasForeignKey("CookieID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-            //                b1.Property<string>("Symbol");
+                    b.HasOne("CookieShop.Domain.Models.Account", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
 
-            //                b1.HasKey("PurchaseHistoryId");
+            modelBuilder.Entity("CookieShop.Domain.Models.FavoriteCookies", b =>
+                {
+                    b.HasOne("CookieShop.Domain.Models.Account", "Account")
+                        .WithMany("FavoriteCookies")
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-            //                b1.ToTable("AssetTransactions");
+                    b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
+                        .WithMany("AccountsIsFavouredBy")
+                        .HasForeignKey("CookieID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
 
-            //                b1.HasOne("CookieShop.Domain.Models.PurchaseHistory")
-            //                    .WithOne("Stock")
-            //                    .HasForeignKey("CookieShop.Domain.Models.Stock", "PurchaseHistoryId")
-            //                    .OnDelete(DeleteBehavior.Cascade);
-            //            });
-            //    });
+            modelBuilder.Entity("CookieShop.Domain.Models.PurchaseHistory", b =>
+                {
+                    b.HasOne("CookieShop.Domain.Models.Account", "Account")
+                        .WithMany("PurchaseHistory")
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
+                        .WithMany()
+                        .HasForeignKey("CookieId");
+                });
 #pragma warning restore 612, 618
         }
     }

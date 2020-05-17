@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace CookieShop.Domain.Models
 {
-    public class Stock
+    public class Stock : DomainObject
     {
-        public string Symbol { get; set; }
-        public double PricePerShare { get; set; }
+        public Cookie Cookie { get; set; }
+        public int Amount { get; set; }
     }
 }

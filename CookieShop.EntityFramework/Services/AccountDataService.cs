@@ -1,6 +1,5 @@
 ﻿using CookieShop.Domain.Models;
 using CookieShop.Domain.Services;
-using CookieShop.EntityFramework.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;

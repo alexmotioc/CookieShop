@@ -13,8 +13,8 @@ namespace CookieShop.EntityFramework
         {
             //throw new NotImplementedException();
             var options = new DbContextOptionsBuilder<CookieShopDbContext>();
-            options.UseSqlServer("Server=(localdb)\\ProjectsV13;Database=CookieShopDB;Trusted_Connection=True;");
-
+            options.UseSqlServer("Server=(localdb)\\ProjectsV13;Database=CookieShopDB;Trusted_Connection=True;")
+                .UseLazyLoadingProxies();
             return new CookieShopDbContext(options.Options);
         }
     }

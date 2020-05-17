@@ -57,6 +57,7 @@ namespace CookieShop.API.Controllers
                     Type = createCookieRequest.Type,
                     Price = createCookieRequest.Price,
                     Sweeteners = createCookieRequest.Sweeteners,
+                    Stock = new Stock { Amount = 0 }
                 });
         }
 
