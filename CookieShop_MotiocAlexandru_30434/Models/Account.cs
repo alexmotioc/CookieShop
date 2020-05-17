@@ -6,11 +6,11 @@ namespace CookieShop.Domain.Models
 {
     public class Account : DomainObject
     {
-        public User AccountHolder { get; set; }
+        public virtual User AccountHolder { get; set; }
         public double Balance { get; set; }
 
-        public IList<PurchaseHistory> PurchaseHistory { get; set; }
-        public IList<FavoriteCookies> FavoriteCookies { get; set; }
-        public IList<CookieRating> Ratings { get; set; }
+        public virtual IList<PurchaseHistory> PurchaseHistory { get; set; }
+        public virtual IList<FavoriteCookies> FavoriteCookies { get; set; }
+        public virtual IList<CookieRating> Ratings { get; set; }
     }
 }

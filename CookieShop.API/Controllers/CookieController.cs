@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using CookieShop.API.Services;
 using CookieShop.Domain.Models;
 using CookieShop.Domain.Services;
@@ -21,18 +22,22 @@ namespace CookieShop.API.Controllers
         private readonly ICookieService _cookieService;
 
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public CookieController(ILogger<CookieController> logger, ICookieService cookieService, ITokenService tokenService)
+        public CookieController(ILogger<CookieController> logger, ICookieService cookieService, ITokenService tokenService, IMapper mapper)
         {
             _logger = logger;
             _cookieService = cookieService;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
 
         [HttpGet()]
         public async Task<IEnumerable<Cookie>> GetAll([FromQuery]GetCookieRequest loginBody)
         {
             var CookieList = await _cookieService.GetAll(loginBody.Name, loginBody.Type, loginBody.Price, loginBody.Sweeteners);
+            //var model = _mapper.Map<IList<CookieResponse>>(CookieList);
+
             return CookieList;
         }
 
@@ -48,9 +53,9 @@ namespace CookieShop.API.Controllers
         }
 
         [HttpPost()]
-        public async Task<Cookie> Create([FromBody] CreateCookieRequest createCookieRequest)
+        public async Task<CookieResponse> Create([FromBody] CreateCookieRequest createCookieRequest)
         {
-            return await _cookieService.Create(
+            var cookie =  await _cookieService.Create(
                 new Cookie
                 {
                     Name = createCookieRequest.Name,
@@ -59,6 +64,8 @@ namespace CookieShop.API.Controllers
                     Sweeteners = createCookieRequest.Sweeteners,
                     Stock = new Stock { Amount = 0 }
                 });
+            var model = _mapper.Map<CookieResponse>(cookie);
+            return model;
         }
 
         public class CreateCookieRequest

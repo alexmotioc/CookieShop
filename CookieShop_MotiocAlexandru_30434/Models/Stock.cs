@@ -7,7 +7,7 @@ namespace CookieShop.Domain.Models
 {
     public class Stock : DomainObject
     {
-        public Cookie Cookie { get; set; }
+        public virtual  Cookie Cookie { get; set; }
         public int Amount { get; set; }
     }
 }

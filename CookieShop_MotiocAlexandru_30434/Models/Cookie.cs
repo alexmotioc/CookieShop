@@ -13,10 +13,10 @@ namespace CookieShop.Domain.Models
         public CookieType Type { get; set; }
         public int Price { get; set; }
         public int Sweeteners { get; set; }
-        public virtual  IList<CookieRating> Ratings { get; set; }
-        public double RatingAvg => Ratings != null ? Ratings.Average(r => r.Rating) : 0;
+        public virtual  IList<CookieRating> Ratings { get; set; } = new List<CookieRating>();
+        public double RatingAvg => Ratings.Count != 0 ? Ratings.Average(r => r.Rating) : 0;
 
-        public virtual IList<FavoriteCookies> AccountsIsFavouredBy {get; set;}
+        public virtual IList<FavoriteCookies> AccountsIsFavouredBy {get; set; } = new List<FavoriteCookies>();
         public int StockID { get; set; }
         public virtual  Stock Stock { get; set; }
     }

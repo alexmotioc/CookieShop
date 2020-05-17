@@ -6,11 +6,11 @@ namespace CookieShop.Domain.Models
     {
         [Key]
         public int CookieID { get; set; }
-        public Cookie Cookie{ get; set;}
+        public virtual Cookie Cookie{ get; set;}
 
         [Key]
         public int UserID { get; set; }
-        public Account User { get; set; }
+        public virtual Account User { get; set; }
         public int Rating { get; set; }
     }
 }

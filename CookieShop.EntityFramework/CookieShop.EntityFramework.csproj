@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200517131550_cookielist.cs" />
     <Compile Remove="Migrations\20200517131550_cookielist.Designer.cs" />
+    <Compile Remove="Migrations\20200517182217_virt.cs" />
+    <Compile Remove="Migrations\20200517182217_virt.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

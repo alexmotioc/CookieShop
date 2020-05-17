@@ -106,17 +106,30 @@ namespace CookieShop.EntityFramework.Services
         //}
          public async Task<Account> AddToFavorites(int accountid, Cookie cookie)
         {
-            var favoriteCookie = new FavoriteCookies() {Cookie = cookie};
+            var favoriteCookie = new FavoriteCookies() {CookieID = cookie.Id, AccountID = accountid};
             
             using (CookieShopDbContext context = _contextFactory.CreateDbContext())
             {
-                Account entity = await context.Accounts
-                   
+
+                //var movieStudiosList
+                //           = movies.Select(
+                //               movie => new MovieStudios
+                //               {
+                //                   MovieId = movie.Id,
+                //                   StudioId = studioId
+                //               })
+                //               .ToList();
+
+                //await DbContext.Set<MovieStudios>().AddRangeAsync(movieStudiosList);
+                //Account entity = await context.Accounts
+
+                //    .Include(a => a.FavoriteCookies)
+                //    .FirstOrDefaultAsync((e) => e.Id == accountid);
+                await context.FavoriteCookies.AddAsync(favoriteCookie);
+                context.SaveChanges();
+                return await context.Accounts
                     .Include(a => a.FavoriteCookies)
                     .FirstOrDefaultAsync((e) => e.Id == accountid);
-                entity.FavoriteCookies.Add(favoriteCookie);
-                context.SaveChanges();
-                return entity;
             }
         }
     }

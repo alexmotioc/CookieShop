@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using AutoMapper;
 using CookieShop.API.Services;
 using CookieShop.Domain.Services;
 using CookieShop.Domain.Services.AuthenticationServices;
@@ -43,7 +44,21 @@ namespace CookieShop.API
             services.AddControllers().AddJsonOptions(opts =>
             {
                 opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                //opts.JsonSerializerOptions.
+                //SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            })
+           .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
             });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            //services.AddMvc();
 
 
 
