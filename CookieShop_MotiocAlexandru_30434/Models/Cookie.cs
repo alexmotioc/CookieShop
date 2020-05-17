@@ -10,6 +10,7 @@ namespace CookieShop.Domain.Models
     public class Cookie : DomainObject
     {
         public string Name { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public CookieType Type { get; set; }
         public int Price { get; set; }
         public int Sweeteners { get; set; }

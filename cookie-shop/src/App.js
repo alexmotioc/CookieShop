@@ -24,7 +24,6 @@ function App() {
   }
 
   return (
-    
     <div className="App">
       <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
        <Router>     

@@ -67,7 +67,15 @@ namespace CookieShop.API.Controllers
             var model = _mapper.Map<CookieResponse>(cookie);
             return model;
         }
+        [HttpPost("rate")]
+        public async Task<CookieRating> AddRatings(int cookieId, int rating)
+        {
+            var cookie = await _cookieService.AddRatings(1,cookieId,rating);
 
+            
+            //var model = _mapper.Map<CookieResponse>(cookie);
+            return cookie;
+        }
         public class CreateCookieRequest
         {
             public string Name { get; set; }

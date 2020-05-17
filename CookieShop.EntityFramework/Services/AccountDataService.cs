@@ -111,21 +111,40 @@ namespace CookieShop.EntityFramework.Services
             using (CookieShopDbContext context = _contextFactory.CreateDbContext())
             {
 
-                //var movieStudiosList
-                //           = movies.Select(
-                //               movie => new MovieStudios
-                //               {
-                //                   MovieId = movie.Id,
-                //                   StudioId = studioId
-                //               })
-                //               .ToList();
-
-                //await DbContext.Set<MovieStudios>().AddRangeAsync(movieStudiosList);
-                //Account entity = await context.Accounts
-
-                //    .Include(a => a.FavoriteCookies)
-                //    .FirstOrDefaultAsync((e) => e.Id == accountid);
                 await context.FavoriteCookies.AddAsync(favoriteCookie);
+                context.SaveChanges();
+                return await context.Accounts
+                    .Include(a => a.FavoriteCookies)
+                    .FirstOrDefaultAsync((e) => e.Id == accountid);
+            }
+        }
+
+        public async Task<List<Cookie>> GetFavorites(int id)
+        {
+           
+
+            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            {
+               var resp = await context
+                    .Accounts
+                    .Include((g) => g.FavoriteCookies)
+                    .ThenInclude((b) => b.Cookie)
+                    .Where((e) => e.Id == id)
+                    .FirstOrDefaultAsync();
+
+                return resp.FavoriteCookies.Select(a => a.Cookie).ToList();
+              
+            }
+        }
+
+        public async Task<Account> RemoveFromFavorites(int accountid, Cookie cookie)
+        {
+            var favoriteCookie = new FavoriteCookies() { CookieID = cookie.Id, AccountID = accountid };
+
+            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            {
+
+                context.FavoriteCookies.Remove(favoriteCookie);
                 context.SaveChanges();
                 return await context.Accounts
                     .Include(a => a.FavoriteCookies)

@@ -1,5 +1,5 @@
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import { Card, Logo, Form, Input, Button } from './AuthPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -24,26 +24,27 @@ const LoginPage = () => {
         }))
     }
     const handleSubmitClick = (e) => {
-        if(state.email.length && state.password.length) {
-            const payload={
-                "email":state.email,
-                "password":state.password,
+        if (state.email.length && state.password.length) {
+            const payload = {
+                "email": state.email,
+                "password": state.password,
 
             }
-            const url = 'http://localhost:52741/Authentification/login';
-            axios.post("http://localhost:52741/Authentification/login", payload
-     ).then(result => {
-      if (result.status === 200) {
-        setAuthTokens(result.data);
-        setLoggedIn(true);
-      } else {
-        setIsError(true);
-      }
-    }).catch(e => {
-      setIsError(true);
-    });
-  }
+
+            axios.post("http://localhost:52741/Authentification/login", payload)
+                .then(result => {
+                    if (result.status === 200) {
+                        setAuthTokens(result.data);
+                        setLoggedIn(true);
+                    } else {
+                        setIsError(true);
+                    }
+                })
+                .catch(e => {
+                    setIsError(true);
+                });
         }
+    }
 
     return (
         <div className="form-group col-12 col-lg-4">
@@ -71,10 +72,10 @@ const LoginPage = () => {
             >
                 Login
           </button>
-          <Link to="/register">Don't have an account?</Link>
-        { isError &&<div>The username or password provided were incorrect!</div> }
+            <Link to="/register">Don't have an account?</Link>
+            {isError && <div>The username or password provided were incorrect!</div>}
         </div>
     )
-    }
+}
 
 export default LoginPage

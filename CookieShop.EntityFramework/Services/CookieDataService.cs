@@ -52,7 +52,18 @@ namespace CookieShop.EntityFramework.Services
                 return entities;
             }
         }
+        public async Task<CookieRating> AddRatings(int userId, int cookieId, int rating)
+        {
+            var cookieRating = new CookieRating() { CookieID = cookieId, UserID = userId, Rating = rating };
 
+            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            {
+
+                var newRating = await context.CookieRatings.AddAsync(cookieRating);
+                context.SaveChanges();
+                return newRating.Entity;
+            }
+        }
         public async Task<Cookie> Update(int id, Cookie entity)
         {
             return await _dataService.Update(id, entity);

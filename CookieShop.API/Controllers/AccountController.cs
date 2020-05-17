@@ -27,8 +27,24 @@ namespace CookieShop.API.Controllers
         [HttpPost("add-favorite")]
         public async Task<Account> AddFavorite([FromBody] Cookie cookieBody)
         {
-            var Account = await _accountService.AddToFavorites(1, cookieBody);
-            return Account;
+            var account = await _accountService.AddToFavorites(1, cookieBody);
+            return account;
+
+        }
+
+        [HttpGet("favorites")]
+        public async Task<List<Cookie>> Favorites()
+        {
+            var favorites = await _accountService.GetFavorites(1);
+            return favorites;
+
+        }
+
+        [HttpPost("remove-favorite")]
+        public async Task<Account> RemoveFromFavorites([FromBody] Cookie cookieBody)
+        {
+            var account = await _accountService.RemoveFromFavorites(1, cookieBody);
+            return account;
 
         }
 

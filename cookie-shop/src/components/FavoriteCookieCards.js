@@ -1,17 +1,12 @@
 import React from 'react'
 import axios from 'axios';
-const CookieCard = ({cookie}) => {
+const FavoriteCookieCard = ({cookie, refresh}) => {
 const {id, name, type, price, sweeteners}=cookie;
-const handleRatingClick = (e, data)=> {
-
-    alert('You left a ' + data.rating + ' star rating for ' + data.caption);
-
-}
 const addToFavorites = () => {
-    axios.post("http://localhost:52741/Account/add-favorite", {id} )
+    axios.post("http://localhost:52741/Account/remove-favorite", {id} )
                 .then(result => {
                     if (result.status === 200) {
-                        //mesaj
+                        refresh();
                     } else {
                         
                     }
@@ -29,9 +24,9 @@ const addToFavorites = () => {
                 <p class="card-text">Price: {price}</p>
                 <p class="card-text">Sweetners: {sweeteners}</p>
                 <a href="#" class="btn btn-primary">Add to cart</a>
-                <a href="#" class="btn btn-primary" onClick={addToFavorites}>Add to favorites</a>
+                <a href="#" class="btn btn-primary" onClick={addToFavorites}>Remove from favorites</a>
             </div>
         </div>
     );
 }
-export default CookieCard
+export default FavoriteCookieCard
