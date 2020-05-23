@@ -11,5 +11,6 @@ namespace CookieShop.EntityFramework.Services
     {
         public  Task<IEnumerable<Cookie>> GetAll(string name, CookieType? type, int? price, int? sweeteners, int? rating);
         Task<CookieRating> AddRatings(int v, int cookieId, int rating);
+        Task<Cookie> UpdateStock(int cookieId, int amount);
     }
 }

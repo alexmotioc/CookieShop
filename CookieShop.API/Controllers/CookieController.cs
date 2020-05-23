@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using CookieShop.API.Services;
@@ -9,8 +10,10 @@ using CookieShop.Domain.Models;
 using CookieShop.Domain.Services;
 using CookieShop.Domain.Services.AuthenticationServices;
 using CookieShop.EntityFramework.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 
 namespace CookieShop.API.Controllers
 {
@@ -21,14 +24,16 @@ namespace CookieShop.API.Controllers
         private readonly ILogger<CookieController> _logger;
         private readonly ICookieService _cookieService;
 
+        private readonly Notify _notificationService;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
 
-        public CookieController(ILogger<CookieController> logger, ICookieService cookieService, ITokenService tokenService, IMapper mapper)
+        public CookieController(ILogger<CookieController> logger, ICookieService cookieService, ITokenService tokenService,Notify notificationService, IMapper mapper)
         {
             _logger = logger;
             _cookieService = cookieService;
             _tokenService = tokenService;
+            _notificationService = notificationService;
             _mapper = mapper;
         }
 
@@ -70,15 +75,41 @@ namespace CookieShop.API.Controllers
         }
 
         [HttpPost("rate")]
+        [Authorize]
         public async Task<CookieRating> AddRatings([FromBody]RatingBody ratingBody)
         {
-            var cookie = await _cookieService.AddRatings(2,ratingBody.cookieId, ratingBody.rating);
+            var token = Request.Headers["Authorization"][0]
+           .Substring("Bearer ".Length);
+            var userId = int.Parse( _tokenService.GetClaim(token, "nameid"));
+            var role = _tokenService.GetClaim(token, "role");
 
-            
-            //var model = _mapper.Map<CookieResponse>(cookie);
+            var cookie = await _cookieService.AddRatings(userId, ratingBody.cookieId, ratingBody.rating);
+
             return cookie;
         }
 
+        [Authorize(Roles = "Admin")]//test
+        [HttpPost("update-stock")]
+        [Authorize]
+        public async Task<Cookie> UpdateStock([FromBody]AddStockBody ratingBody)
+        {
+            var token = Request.Headers["Authorization"][0]
+           .Substring("Bearer ".Length);
+            var userId = int.Parse(_tokenService.GetClaim(token, "nameid"));
+            var role = _tokenService.GetClaim(token, "role");
+
+            var cookie = await _cookieService.UpdateStock(ratingBody.cookieId, ratingBody.amount);
+            await _notificationService.Send("updated stock for cookie " + cookie.Name);
+
+            return cookie;
+        }
+
+
+        public class AddStockBody
+        {
+            public int cookieId { get; set; }
+            public int amount { get; set; }
+        }
         public class RatingBody
         {
             public int cookieId { get; set; }

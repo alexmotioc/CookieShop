@@ -104,20 +104,7 @@ namespace CookieShop.EntityFramework.Services
         //{
         //    return await _nonQueryDataService.Update(id, entity);
         //}
-         public async Task<Account> AddToFavorites(int accountid, Cookie cookie)
-        {
-            var favoriteCookie = new FavoriteCookies() {CookieID = cookie.Id, AccountID = accountid};
-            
-            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
-            {
-
-                await context.FavoriteCookies.AddAsync(favoriteCookie);
-                context.SaveChanges();
-                return await context.Accounts
-                    .Include(a => a.FavoriteCookies)
-                    .FirstOrDefaultAsync((e) => e.Id == accountid);
-            }
-        }
+        
 
         public async Task<List<Cookie>> GetFavorites(int id)
         {
@@ -151,5 +138,51 @@ namespace CookieShop.EntityFramework.Services
                     .FirstOrDefaultAsync((e) => e.Id == accountid);
             }
         }
+
+        public async Task<PurchaseHistory> BuyCookie(int accountid, Cookie cookie, int amount)
+        {
+            
+
+            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            {
+                var account = await context.Accounts.FirstAsync((e) => e.Id == accountid);
+                var cookiedb  = (await context.Cookies.FirstAsync((e) => e.Id == cookie.Id));
+                var boughtCookie = new PurchaseHistory()
+                {
+                    Cookie = cookiedb,
+                    Amount = amount,
+                    AccountId = accountid,
+                    DateProcessed = DateTime.Now,
+                    IsPurchase = true
+                };
+               
+                var result = await context.PurchaseHistory.AddAsync(boughtCookie);
+                var stock = await context.Stocks.FirstOrDefaultAsync((e) => e.Cookie.Id == cookie.Id);
+                stock.Amount--;
+
+                account.Balance -= cookiedb.Price;
+
+                context.SaveChanges();
+                return result.Entity;
+            }
+            //throw new NotImplementedException();
+        }
+
+        public async Task<Account> AddToFavorites(int accountid, Cookie cookie)
+        {
+            var favoriteCookie = new FavoriteCookies() { CookieID = cookie.Id, AccountID = accountid };
+
+            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            {
+
+                await context.FavoriteCookies.AddAsync(favoriteCookie);
+                context.SaveChanges();
+                return await context.Accounts
+                    .Include(a => a.FavoriteCookies)
+                    .FirstOrDefaultAsync((e) => e.Id == accountid);
+            }
+        }
+
+
     }
 }

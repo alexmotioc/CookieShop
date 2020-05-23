@@ -1,15 +1,22 @@
 import React from 'react'
 import axios from 'axios';
 import ReactStars from 'react-stars'
+import { useAuth } from '../context/authcontext';
 const CookieCard = ({ cookie }) => {
-    
+    const { authTokens } = useAuth();
+    const options = {
+        headers: {
+            'Authorization': 'Bearer '+ authTokens
+        }}
     const { id, name, type, price, sweeteners,ratingAvg} = cookie;
     const ratingChanged = (newRating) => {
         axios.post("http://localhost:52741/Cookie/rate", 
         { 
             cookieId: id, 
             rating: Math.round(newRating)
-        }
+        },
+        
+          options
         )
             .then(result => {
                 if (result.status === 200) {
@@ -23,8 +30,22 @@ const CookieCard = ({ cookie }) => {
             });
         console.log(newRating)
     }
+    
     const addToFavorites = () => {
-        axios.post("http://localhost:52741/Account/add-favorite", { id })
+        axios.post("http://localhost:52741/Account/add-favorite", { id }, options)
+            .then(result => {
+                if (result.status === 200) {
+                    //mesaj
+                } else {
+
+                }
+            })
+            .catch(e => {
+
+            });
+    }
+    const buyCookies = () => {
+        axios.post("http://localhost:52741/Account/buy-cookie", { id }, options)
             .then(result => {
                 if (result.status === 200) {
                     //mesaj
@@ -44,9 +65,11 @@ const CookieCard = ({ cookie }) => {
                 <p class="card-text">Type: {type}</p>
                 <p class="card-text">Price: {price}</p>
                 <p class="card-text">Sweetners: {sweeteners}</p>
-                <ReactStars count={5} onChange={ratingChanged} size={24} color2={'#ffd700'} value={Math.round(ratingAvg)} />
+                {(authTokens!=null) ?? ( <ReactStars  count={5} onChange={ratingChanged} size={24} color2={'#ffd700'} value={Math.round(ratingAvg)} />)}
+               
                 <a href="#" class="btn btn-primary">Add to cart</a>
                 <a href="#" class="btn btn-primary" onClick={addToFavorites}>Add to favorites</a>
+                <a href="#" class="btn btn-primary" onClick={buyCookies}>Buy</a>
             </div>
         </div>
     );

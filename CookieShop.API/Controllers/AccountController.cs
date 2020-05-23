@@ -1,9 +1,10 @@
-﻿using CookieShop.Domain.Models;
+﻿using CookieShop.API.Services;
+using CookieShop.Domain.Models;
 using CookieShop.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CookieShop.API.Controllers
@@ -17,34 +18,61 @@ namespace CookieShop.API.Controllers
     public class AccountController : ControllerBase
     {
             private readonly IAccountService _accountService;
+        private readonly ITokenService _tokenService;
 
 
-            public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, ITokenService tokenService)
             {   
                 _accountService = accountService;
+            _tokenService = tokenService;
                
             }
+        [Authorize]
         [HttpPost("add-favorite")]
         public async Task<Account> AddFavorite([FromBody] Cookie cookieBody)
         {
-            var account = await _accountService.AddToFavorites(1, cookieBody);
+            var token = Request.Headers["Authorization"][0]
+           .Substring("Bearer ".Length);
+            var userId = int.Parse(_tokenService.GetClaim(token, "nameid"));
+            var account = await _accountService.AddToFavorites(userId, cookieBody);
             return account;
 
         }
 
+        [Authorize]
         [HttpGet("favorites")]
         public async Task<List<Cookie>> Favorites()
         {
-            var favorites = await _accountService.GetFavorites(1);
+            var token = Request.Headers["Authorization"][0]
+           .Substring("Bearer ".Length);
+            var userId = int.Parse(_tokenService.GetClaim(token, "nameid"));
+            var favorites = await _accountService.GetFavorites(userId);
             return favorites;
 
         }
 
+        [Authorize]
         [HttpPost("remove-favorite")]
         public async Task<Account> RemoveFromFavorites([FromBody] Cookie cookieBody)
         {
-            var account = await _accountService.RemoveFromFavorites(1, cookieBody);
+            var token = Request.Headers["Authorization"][0]
+           .Substring("Bearer ".Length);
+            var userId = int.Parse(_tokenService.GetClaim(token, "nameid"));
+            var account = await _accountService.RemoveFromFavorites(userId, cookieBody);
             return account;
+
+        }
+
+        [Authorize]
+        [HttpPost("buy-cookie")]
+        public async Task<PurchaseHistory> Buy([FromBody] Cookie purchaseCookieBody)
+        {
+            var token = Request.Headers["Authorization"][0]
+           .Substring("Bearer ".Length);
+            var userId = int.Parse(_tokenService.GetClaim(token, "nameid"));
+           
+                var purcase = await _accountService.BuyCookie(userId, purchaseCookieBody,1);
+            return purcase;
 
         }
 

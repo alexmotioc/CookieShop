@@ -15,7 +15,7 @@ const LoginPage = () => {
     })
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [isError, setIsError] = useState(false);
-    const { setAuthTokens } = useAuth();
+    const { setAuthTokens, setRole, setBalance } = useAuth();
     const handleChange = (e) => {
         const { id, value } = e.target
         setState(prevState => ({
@@ -34,7 +34,9 @@ const LoginPage = () => {
             axios.post("http://localhost:52741/Authentification/login", payload)
                 .then(result => {
                     if (result.status === 200) {
-                        setAuthTokens(result.data);
+                        setAuthTokens(result.data.token);
+                        setRole(result.data.role);
+                        setBalance(result.data.balance)
                         setLoggedIn(true);
                     } else {
                         setIsError(true);

@@ -11,7 +11,7 @@ namespace CookieShop.EntityFramework
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<PurchaseHistory> AssetTransactions { get; set; }
+        public DbSet<PurchaseHistory> PurchaseHistory { get; set; }
         public DbSet<Cookie> Cookies { get; set; }
         public DbSet<CookieRating> CookieRatings { get; set; }
         public DbSet<FavoriteCookies> FavoriteCookies { get; set; }

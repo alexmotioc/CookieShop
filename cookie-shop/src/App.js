@@ -12,20 +12,45 @@ import CartPage from './components/CartPage'
 import LoginPage from './components/LoginPage'
 import RegisterPage from './components/RegisterPage'
 import { AuthContext } from "./context/authcontext";
+import StockPage from './components/StockPage';
+import AdminRoute from './components/AdminRoute'
+import PrivateRoute from './components/PrivateRoute'
+import { ToastProvider, useToasts } from 'react-toast-notifications'
 
 
 function App() {
   const existingTokens = JSON.parse(localStorage.getItem("tokens"));
+  const existingRole = JSON.parse(localStorage.getItem("role"));
+  const existingBalance = JSON.parse(localStorage.getItem("balance"));
   const [authTokens, setAuthTokens] = useState(existingTokens);
+  const [role, setRole] = useState(existingRole);
+  const [balance, setBalance] = useState(existingBalance);
 
   const setTokens = (data) => {
     localStorage.setItem("tokens", JSON.stringify(data));
     setAuthTokens(data);
   }
 
+  const setRoleInstorage = (data) => {
+    localStorage.setItem("role", JSON.stringify(data));
+    setRole(data);
+  }
+
+  const setBalanceInstorage = (data) => {
+    localStorage.setItem("balance", JSON.stringify(data));
+    setBalance(data);
+  }
+
   return (
     <div className="App">
-      <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+      <ToastProvider>
+
+      
+    
+      <AuthContext.Provider value={{ 
+        authTokens, setAuthTokens: setTokens, 
+        role, setRole: setRoleInstorage 
+        }}>
        <Router>     
       <header className="App-header">
 
@@ -48,7 +73,7 @@ function App() {
                 <a class="nav-link" href="/favorites">Favorites</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/cart">Cart</a>
+                <a class="nav-link" href="/stock">Stock</a>
               </li>
             </ul>
             <button className="login btn btn-primary">  User
@@ -61,13 +86,15 @@ function App() {
       <div className="content">
       <Route exact path="/" component={HomePage} />
         <Route path="/cookies" component={CookiesPage} />
-        <Route path='/favorites' component={FavoritePage}/>
+        <PrivateRoute path='/favorites' component={FavoritePage}/>
         <Route path='/cart' component={CartPage}/>
         <Route path='/login' component={LoginPage}/>
         <Route path='/register' component={RegisterPage}/>
+        <AdminRoute path='/stock' component={StockPage}/>
       </div>
       </Router>
       </AuthContext.Provider>
+      </ToastProvider>
     </div>
   );
 }

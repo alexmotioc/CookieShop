@@ -47,7 +47,7 @@ namespace CookieShop.EntityFramework.Services
             {
                 IEnumerable<Cookie> entities = (await context.Set<Cookie>()
                     .Include((a) => a.Ratings)
-                    
+                    .Include(c=> c.Stock)
                     .Where(cookie => 
                     (name == null ||name == string.Empty || cookie.Name.Contains(name)) 
                     && (type == null || cookie.Type == type) 
@@ -78,6 +78,17 @@ namespace CookieShop.EntityFramework.Services
         public async Task<Cookie> Update(int id, Cookie entity)
         {
             return await _dataService.Update(id, entity);
+        }
+
+        public async Task<Cookie> UpdateStock(int cookieId, int amount)
+        {
+            using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            {
+                var stock = await context.Stocks.FirstOrDefaultAsync(s => s.Cookie.Id == cookieId);
+                stock.Amount = amount;
+                context.SaveChanges();
+                return await context.Cookies.Include(c => c.Stock).FirstOrDefaultAsync(s => s.Id == cookieId);
+            }
         }
     }
 }

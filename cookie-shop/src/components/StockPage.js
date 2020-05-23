@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import FavoriteCookieCard from './FavoriteCookieCards'
+import StockCard from './StockCards'
 import axios from 'axios';
 import { useAuth } from '../context/authcontext';
-const FavoritesPage = () => {
-    const url = 'http://localhost:52741/account/favorites'
+const StockPage = () => {
+    const url = 'http://localhost:52741/Cookie'
     const [data, setData] = useState([])
     const { authTokens } = useAuth();
     const options = {
@@ -19,11 +19,11 @@ const FavoritesPage = () => {
         <div className="d-flex flex-row flex-wrap">
         {data.map(cookie => {
         return (
-         <FavoriteCookieCard refresh={makeRequest} cookie={cookie}></FavoriteCookieCard>
+         <StockCard refresh={makeRequest} cookie={cookie}></StockCard>
         )
       })}
     </div>
     );
 } 
 
-export default FavoritesPage
+export default StockPage

@@ -4,14 +4,16 @@ using CookieShop.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CookieShop.EntityFramework.Migrations
 {
     [DbContext(typeof(CookieShopDbContext))]
-    partial class CookieShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200518091801_userrole")]
+    partial class userrole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,7 +116,7 @@ namespace CookieShop.EntityFramework.Migrations
 
                     b.HasIndex("CookieId");
 
-                    b.ToTable("PurchaseHistory");
+                    b.ToTable("AssetTransactions");
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.Stock", b =>

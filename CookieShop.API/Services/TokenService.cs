@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using CookieShop.Domain.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,13 +12,13 @@ namespace CookieShop.API.Services
 {
     public interface ITokenService
     {
-		public string CreateToken(int userId);
+		public string CreateToken(int userId, roleType role);
 		public string GetClaim(string token, string claimType);
 
 	}
 	public class TokenService : ITokenService
 	{
-		public string CreateToken(int userId)
+		public string CreateToken(int userId, roleType role)
 		{
 			var mySecret = "asdv234234^&%&^%&^hjsdfb2%%%";
 			var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
@@ -30,7 +31,8 @@ namespace CookieShop.API.Services
 			{
 				Subject = new ClaimsIdentity(new Claim[]
 				{
-			new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+					new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+					new Claim(ClaimTypes.Role, role.ToString())
 				}),
 				Expires = DateTime.UtcNow.AddDays(7),
 				Issuer = myIssuer,

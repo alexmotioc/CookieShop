@@ -29,7 +29,7 @@ namespace CookieShop.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<string> Login([FromBody] LoginBody loginBody)
+        public async Task<LoginResponse> Login([FromBody] LoginBody loginBody)
         {
             var Account = await _authenticationService.Login(loginBody.Email, loginBody.Password);
             if (Account == null)
@@ -39,11 +39,24 @@ namespace CookieShop.API.Controllers
             }
             else
             {
-                return _tokenService.CreateToken(Account.Id);
+
+                return new LoginResponse
+                {
+                    Token = _tokenService.CreateToken(Account.Id, Account.Role),
+                    Role = Account.Role.ToString(), 
+                    Balance = Account.Balance
+                };
             }
 
 
 
+        }
+
+    public class LoginResponse
+    {
+        public string Token { get; set; }
+        public string Role { get; set; }
+            public double Balance { get; set; }
         }
 
         public class LoginBody
