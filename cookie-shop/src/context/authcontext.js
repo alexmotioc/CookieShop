@@ -19,7 +19,7 @@ export function useAuth() {
   const options = {
     transport,
     logMessageContent: true,
-    logger: signalR.LogLevel.Trace,
+    logger: signalR.LogLevel.Error,
     accessTokenFactory: () => authTokens 
   };
 
