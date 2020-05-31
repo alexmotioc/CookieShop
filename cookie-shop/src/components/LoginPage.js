@@ -8,6 +8,7 @@ import sendDetailsToServer from "../services/sendDetailsToServer";
 import axios from 'axios';
 import { useAuth } from "../context/authcontext"
 
+
 const LoginPage = () => {
     const [state, setState] = useState({
         email: "",
@@ -15,7 +16,7 @@ const LoginPage = () => {
     })
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [isError, setIsError] = useState(false);
-    const { setAuthTokens, setRole, setBalance } = useAuth();
+    const { setAuthTokens, setRole, setBalance, setUnserName } = useAuth();
     const handleChange = (e) => {
         const { id, value } = e.target
         setState(prevState => ({
@@ -37,7 +38,10 @@ const LoginPage = () => {
                         setAuthTokens(result.data.token);
                         setRole(result.data.role);
                         setBalance(result.data.balance)
+                        setUnserName(result.data.Name)
                         setLoggedIn(true);
+
+                      
                     } else {
                         setIsError(true);
                     }

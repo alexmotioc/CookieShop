@@ -11,9 +11,7 @@ namespace CookieShop.Domain.Models
 
         public bool IsPurchase { get; set; } //? 
 
-        public virtual Cookie Cookie { get; set; }
-
-        public int Amount { get; set; }
+        public virtual IList<PurchaseItem> Items { get; set; } = new List<PurchaseItem>();
 
         public DateTime DateProcessed { get; set; }
     }

@@ -16,15 +16,16 @@ import StockPage from './components/StockPage';
 import AdminRoute from './components/AdminRoute'
 import PrivateRoute from './components/PrivateRoute'
 import { ToastProvider, useToasts } from 'react-toast-notifications'
+import UserInfoComponent from './components/UserInfoComponent'
 
 
 function App() {
   const existingTokens = JSON.parse(localStorage.getItem("tokens"));
   const existingRole = JSON.parse(localStorage.getItem("role"));
-  const existingBalance = JSON.parse(localStorage.getItem("balance"));
+
   const [authTokens, setAuthTokens] = useState(existingTokens);
   const [role, setRole] = useState(existingRole);
-  const [balance, setBalance] = useState(existingBalance);
+
 
   const setTokens = (data) => {
     localStorage.setItem("tokens", JSON.stringify(data));
@@ -36,20 +37,14 @@ function App() {
     setRole(data);
   }
 
-  const setBalanceInstorage = (data) => {
-    localStorage.setItem("balance", JSON.stringify(data));
-    setBalance(data);
-  }
+  
 
   return (
     <div className="App">
       <ToastProvider>
-
-      
-    
       <AuthContext.Provider value={{ 
         authTokens, setAuthTokens: setTokens, 
-        role, setRole: setRoleInstorage 
+        role, setRole: setRoleInstorage ,
         }}>
        <Router>     
       <header className="App-header">
@@ -63,6 +58,9 @@ function App() {
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+             <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+              </li>
               <li class="nav-item active">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
               </li>
@@ -75,12 +73,14 @@ function App() {
               <li class="nav-item">
                 <a class="nav-link" href="/stock">Stock</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/cart">Cart</a>
+              </li>
             </ul>
-            <button className="login btn btn-primary">  User
-       <FontAwesomeIcon className="" icon={faUserNinja} alt="login" />
-          </button>
+           
           </div>
-         
+          
+      {authTokens != null && (<UserInfoComponent />)}
         </nav>
       </header>
       <div className="content">

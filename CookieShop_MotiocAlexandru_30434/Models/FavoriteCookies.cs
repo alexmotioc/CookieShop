@@ -7,8 +7,8 @@ namespace CookieShop.Domain.Models
 {
     public class FavoriteCookies
     {
-            [Key]
-            public int CookieID { get; set; }
+        [Key]
+        public int CookieID { get; set; }
         public virtual Cookie Cookie { get; set; }
 
         [Key]

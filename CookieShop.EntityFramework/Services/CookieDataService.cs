@@ -87,7 +87,10 @@ namespace CookieShop.EntityFramework.Services
                 var stock = await context.Stocks.FirstOrDefaultAsync(s => s.Cookie.Id == cookieId);
                 stock.Amount = amount;
                 context.SaveChanges();
-                return await context.Cookies.Include(c => c.Stock).FirstOrDefaultAsync(s => s.Id == cookieId);
+                return await context.Cookies
+                    .Include(c => c.Stock)
+                    .Include(c => c.AccountsIsFavouredBy)
+                    .FirstOrDefaultAsync(s => s.Id == cookieId);
             }
         }
     }

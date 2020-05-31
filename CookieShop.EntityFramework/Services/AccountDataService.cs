@@ -139,29 +139,34 @@ namespace CookieShop.EntityFramework.Services
             }
         }
 
-        public async Task<PurchaseHistory> BuyCookie(int accountid, Cookie cookie, int amount)
+        public async Task<PurchaseHistory> BuyCookie(int accountid, List<PurchaseItem> cookieList)
         {
             
 
             using (CookieShopDbContext context = _contextFactory.CreateDbContext())
             {
                 var account = await context.Accounts.FirstAsync((e) => e.Id == accountid);
-                var cookiedb  = (await context.Cookies.FirstAsync((e) => e.Id == cookie.Id));
+               // var cookiedb  = (await context.Cookies.FirstAsync((e) => e.Id == cookie.Id));
+              
                 var boughtCookie = new PurchaseHistory()
                 {
-                    Cookie = cookiedb,
-                    Amount = amount,
+                    
+                    //Cookie = cookiedb,
+                    //Amount = amount,
+                    Items = cookieList,
                     AccountId = accountid,
                     DateProcessed = DateTime.Now,
                     IsPurchase = true
                 };
-               
-                var result = await context.PurchaseHistory.AddAsync(boughtCookie);
-                var stock = await context.Stocks.FirstOrDefaultAsync((e) => e.Cookie.Id == cookie.Id);
-                stock.Amount--;
-
-                account.Balance -= cookiedb.Price;
-
+               var result = await context.PurchaseHistory.AddAsync(boughtCookie);
+                //foreach(var cookie in cookieList)
+                //{
+                //    var cookiedb = (await context.Cookies.FirstAsync((e) => e.Id == cookie.Cookie.Id));
+                //    var stock = await context.Stocks.FirstOrDefaultAsync((e) => e.Cookie.Id == cookie.Cookie.Id);
+                //    stock.Amount--;
+                //    account.Balance -= cookiedb.Price * cookie.Amount;
+                //}
+             
                 context.SaveChanges();
                 return result.Entity;
             }

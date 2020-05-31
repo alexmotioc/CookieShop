@@ -99,7 +99,11 @@ namespace CookieShop.API.Controllers
             var role = _tokenService.GetClaim(token, "role");
 
             var cookie = await _cookieService.UpdateStock(ratingBody.cookieId, ratingBody.amount);
-            await _notificationService.Send("updated stock for cookie " + cookie.Name);
+            foreach(var user in cookie.AccountsIsFavouredBy)
+            {
+                   await _notificationService.SendToUser(user.AccountID.ToString(), "updated stock for cookie " + cookie.Name);
+            }
+            
 
             return cookie;
         }

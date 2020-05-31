@@ -44,7 +44,8 @@ namespace CookieShop.API.Controllers
                 {
                     Token = _tokenService.CreateToken(Account.Id, Account.Role),
                     Role = Account.Role.ToString(), 
-                    Balance = Account.Balance
+                    Balance = Account.Balance,
+                    Name = loginBody.Email
                 };
             }
 
@@ -57,6 +58,7 @@ namespace CookieShop.API.Controllers
         public string Token { get; set; }
         public string Role { get; set; }
             public double Balance { get; set; }
+            public string Name { get; set; }
         }
 
         public class LoginBody

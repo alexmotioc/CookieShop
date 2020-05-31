@@ -6,6 +6,9 @@ import { ToastProvider, useToasts } from 'react-toast-notifications'
 export const AuthContext = createContext();
 
 export function useAuth() {
+  
+  const context = useContext(AuthContext);
+  const { authTokens } = context;
   const { addToast } = useToasts();
   useEffect(() => {
    
@@ -17,7 +20,7 @@ export function useAuth() {
     transport,
     logMessageContent: true,
     logger: signalR.LogLevel.Trace,
-    //accessTokenFactory: () => this.props.accessToken,
+    accessTokenFactory: () => authTokens 
   };
 
   // create the connection instance
@@ -25,10 +28,10 @@ export function useAuth() {
     .withUrl('https://localhost:44393/notification', options)
     .withHubProtocol(protocol)
     .build();
-
+  
   connection.on('notification', (res) => {
     console.info('Yayyyyy, I just received a notification!!!', res);
-    addToast('Saved Successfully', { appearance: 'success' });
+    addToast(res, { appearance: 'success' });
 
   });
 
@@ -40,5 +43,5 @@ export function useAuth() {
     connection.stop();
     };
 })
-  return useContext(AuthContext);
+  return context;
 }

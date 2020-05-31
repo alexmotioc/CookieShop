@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static CookieShop.API.Controllers.AccountController;
 
 namespace CookieShop.API
 {
@@ -14,6 +15,7 @@ namespace CookieShop.API
         {
             // Add as many of these lines as you need to map your objects
             CreateMap<Cookie, CookieResponse>();
+            CreateMap<CookiePurchase, PurchaseItem>();
            
         }
     }

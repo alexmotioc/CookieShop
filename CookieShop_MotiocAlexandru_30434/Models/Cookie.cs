@@ -20,6 +20,7 @@ namespace CookieShop.Domain.Models
         public double RatingAvg => Ratings.Count != 0 ? Ratings.Average(r => r.Rating) : 0;
 
         public virtual IList<FavoriteCookies> AccountsIsFavouredBy {get; set; } = new List<FavoriteCookies>();
+        public virtual IList<PurchaseItem> PurchaseHistory { get; set; } = new List<PurchaseItem>();
         public int StockID { get; set; }
         public virtual  Stock Stock { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using CookieShop.API.Services;
+﻿using AutoMapper;
+using CookieShop.API.Services;
 using CookieShop.Domain.Models;
 using CookieShop.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -19,15 +20,19 @@ namespace CookieShop.API.Controllers
     {
             private readonly IAccountService _accountService;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
 
-        public AccountController(IAccountService accountService, ITokenService tokenService)
+
+        public AccountController(IAccountService accountService, ITokenService tokenService,IMapper mapper)
             {   
                 _accountService = accountService;
             _tokenService = tokenService;
-               
-            }
-        [Authorize]
+            _mapper = mapper;
+
+
+    }
+    [Authorize]
         [HttpPost("add-favorite")]
         public async Task<Account> AddFavorite([FromBody] Cookie cookieBody)
         {
@@ -52,6 +57,22 @@ namespace CookieShop.API.Controllers
         }
 
         [Authorize]
+        [HttpGet("info")]
+        public async Task<UserInfoResponse> Info()
+        {
+            var token = Request.Headers["Authorization"][0]
+           .Substring("Bearer ".Length);
+            var userId = int.Parse(_tokenService.GetClaim(token, "nameid"));
+            var user = await _accountService.Get(userId);
+            return new UserInfoResponse
+            {
+                Balance = user.Balance,
+                User = user.AccountHolder.Username
+            };
+
+        }
+
+        [Authorize]
         [HttpPost("remove-favorite")]
         public async Task<Account> RemoveFromFavorites([FromBody] Cookie cookieBody)
         {
@@ -65,16 +86,41 @@ namespace CookieShop.API.Controllers
 
         [Authorize]
         [HttpPost("buy-cookie")]
-        public async Task<PurchaseHistory> Buy([FromBody] Cookie purchaseCookieBody)
+        public async Task<PurchaseHistory> Buy([FromBody] List<CookiePurchase> purchaseCookieBody)
         {
             var token = Request.Headers["Authorization"][0]
            .Substring("Bearer ".Length);
             var userId = int.Parse(_tokenService.GetClaim(token, "nameid"));
-           
-                var purcase = await _accountService.BuyCookie(userId, purchaseCookieBody,1);
+
+            var model = _mapper.Map<List<PurchaseItem>>(purchaseCookieBody);
+            var list = new List<PurchaseItem>();
+            foreach(var item in purchaseCookieBody)
+            {
+                list.Add(new PurchaseItem
+                {
+                    Amount = item.Amount,
+                    Cookie = item.Cookie,
+                    CookieId = item.Cookie.Id
+                });
+            }
+
+            var purcase = await _accountService.BuyCookie(userId, list);
             return purcase;
 
         }
 
+        public class CookiePurchase
+        {
+            public Cookie Cookie { get; set; }
+            public int Amount { get; set; }
+
+        }
+
+        public class UserInfoResponse
+        {
+            public double Balance { get;  set; }
+            public string User { get;  set; }
+        }
     }
 }
+ 

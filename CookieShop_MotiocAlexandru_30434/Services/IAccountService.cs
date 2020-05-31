@@ -11,7 +11,7 @@ namespace CookieShop.Domain.Services
         Task<Account> GetByUsername(string username);
         Task<Account> GetByEmail(string email);
         Task<Account> AddToFavorites(int accountid, Cookie cookie);
-        Task<PurchaseHistory> BuyCookie(int accountid, Cookie cookie, int amount = 1);
+        Task<PurchaseHistory> BuyCookie(int accountid, List<PurchaseItem> cookies);
         Task<List<Cookie>> GetFavorites(int id);
         Task<Account> RemoveFromFavorites(int accountid, Cookie cookie);
     }

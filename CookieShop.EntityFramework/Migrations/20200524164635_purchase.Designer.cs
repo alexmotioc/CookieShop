@@ -4,14 +4,16 @@ using CookieShop.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CookieShop.EntityFramework.Migrations
 {
     [DbContext(typeof(CookieShopDbContext))]
-    partial class CookieShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200524164635_purchase")]
+    partial class purchase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +121,7 @@ namespace CookieShop.EntityFramework.Migrations
 
                     b.Property<int>("Amount");
 
-                    b.Property<int>("CookieId");
+                    b.Property<int?>("CookieId");
 
                     b.Property<int?>("PurchaseHistoryId");
 
@@ -129,7 +131,7 @@ namespace CookieShop.EntityFramework.Migrations
 
                     b.HasIndex("PurchaseHistoryId");
 
-                    b.ToTable("purchaseItems");
+                    b.ToTable("PurchaseItem");
                 });
 
             modelBuilder.Entity("CookieShop.Domain.Models.Stock", b =>
@@ -216,9 +218,8 @@ namespace CookieShop.EntityFramework.Migrations
             modelBuilder.Entity("CookieShop.Domain.Models.PurchaseItem", b =>
                 {
                     b.HasOne("CookieShop.Domain.Models.Cookie", "Cookie")
-                        .WithMany("PurchaseHistory")
-                        .HasForeignKey("CookieId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("CookieId");
 
                     b.HasOne("CookieShop.Domain.Models.PurchaseHistory", "PurchaseHistory")
                         .WithMany("Items")

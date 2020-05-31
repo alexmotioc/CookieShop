@@ -12,6 +12,7 @@ namespace CookieShop.EntityFramework
         public DbSet<User> Users { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<PurchaseHistory> PurchaseHistory { get; set; }
+        public DbSet<PurchaseItem> purchaseItems { get; set; }
         public DbSet<Cookie> Cookies { get; set; }
         public DbSet<CookieRating> CookieRatings { get; set; }
         public DbSet<FavoriteCookies> FavoriteCookies { get; set; }
@@ -22,7 +23,10 @@ namespace CookieShop.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PurchaseHistory>().HasOne(a => a.Cookie);
+            modelBuilder.Entity<PurchaseItem>().HasOne(a => a.PurchaseHistory);
+            modelBuilder.Entity<PurchaseItem>().HasOne(a => a.Cookie).WithMany(c => c.PurchaseHistory).HasForeignKey(c => c.CookieId);
+            
+            //modelBuilder.Entity<PurchaseHistory>().HasOne(a => a.Cookie);
             //Entity<AssetTransaction>.OwnsOne(a => a.Stock);
             // modelBuilder.Entity<AssetTransaction>.OwnsOne(a => a.Stock);
             modelBuilder.Entity<Stock>().HasOne(s => s.Cookie).WithOne(c => c.Stock).HasForeignKey<Cookie>(c=> c.StockID);
