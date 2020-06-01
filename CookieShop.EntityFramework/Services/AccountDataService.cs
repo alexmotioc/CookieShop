@@ -2,6 +2,7 @@
 using CookieShop.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -139,7 +140,7 @@ namespace CookieShop.EntityFramework.Services
             }
         }
 
-        public async Task<PurchaseHistory> BuyCookie(int accountid, List<PurchaseItem> cookieList)
+        public async Task<PurchaseHistory> BuyCart(int accountid, List<PurchaseItem> cookieList)
         {
             
 
@@ -148,7 +149,7 @@ namespace CookieShop.EntityFramework.Services
                 var account = await context.Accounts.FirstAsync((e) => e.Id == accountid);
                // var cookiedb  = (await context.Cookies.FirstAsync((e) => e.Id == cookie.Id));
               
-                var boughtCookie = new PurchaseHistory()
+                var boughtCookies = new PurchaseHistory()
                 {
                     
                     //Cookie = cookiedb,
@@ -158,20 +159,58 @@ namespace CookieShop.EntityFramework.Services
                     DateProcessed = DateTime.Now,
                     IsPurchase = true
                 };
-               var result = await context.PurchaseHistory.AddAsync(boughtCookie);
-                //foreach(var cookie in cookieList)
-                //{
-                //    var cookiedb = (await context.Cookies.FirstAsync((e) => e.Id == cookie.Cookie.Id));
-                //    var stock = await context.Stocks.FirstOrDefaultAsync((e) => e.Cookie.Id == cookie.Cookie.Id);
-                //    stock.Amount--;
-                //    account.Balance -= cookiedb.Price * cookie.Amount;
-                //}
-             
+               var result = await context.PurchaseHistory.AddAsync(boughtCookies);
+                foreach (var cookie in cookieList)
+                {
+                    var cookiedb = (await context.Cookies.FirstAsync((e) => e.Id == cookie.CookieId));
+                    var stock = await context.Stocks.FirstOrDefaultAsync((e) => e.Cookie.Id == cookie.CookieId);
+                    stock.Amount--;
+                    account.Balance -= cookiedb.Price * cookie.Amount;
+                }
+
                 context.SaveChanges();
                 return result.Entity;
             }
             //throw new NotImplementedException();
         }
+
+
+        public async Task<PurchaseHistory> BuyCookie(int accountid, Cookie cookie, int amount)
+        {
+            var cookieList = new List<PurchaseItem>()
+            {
+                new PurchaseItem
+                {
+                    Cookie = cookie,
+                    Amount = amount
+                }
+            };
+            return await BuyCart(accountid, cookieList);
+
+            //using (CookieShopDbContext context = _contextFactory.CreateDbContext())
+            //{
+            //    var account = await context.Accounts.FirstAsync((e) => e.Id == accountid);
+            //    var cookiedb = (await context.Cookies.FirstAsync((e) => e.Id == cookie.Id));
+            //    var boughtCookie = new PurchaseHistory()
+            //    {
+            //        Items = cookieList,
+            //        AccountId = accountid,
+            //        DateProcessed = DateTime.Now,
+            //        IsPurchase = true
+            //    };
+
+            //    var result = await context.PurchaseHistory.AddAsync(boughtCookie);
+            //    var stock = await context.Stocks.FirstOrDefaultAsync((e) => e.Cookie.Id == cookie.Id);
+            //    stock.Amount--;
+
+            //    account.Balance -= cookiedb.Price;
+
+            //    context.SaveChanges();
+            //    return result.Entity;
+            //}
+            //throw new NotImplementedException();
+        }
+
 
         public async Task<Account> AddToFavorites(int accountid, Cookie cookie)
         {

@@ -85,8 +85,8 @@ namespace CookieShop.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("buy-cookie")]
-        public async Task<PurchaseHistory> Buy([FromBody] List<CookiePurchase> purchaseCookieBody)
+        [HttpPost("buy-cart")]
+        public async Task<PurchaseHistory> BuyCart([FromBody] List<CookiePurchase> purchaseCookieBody)
         {
             var token = Request.Headers["Authorization"][0]
            .Substring("Bearer ".Length);
@@ -99,12 +99,12 @@ namespace CookieShop.API.Controllers
                 list.Add(new PurchaseItem
                 {
                     Amount = item.Amount,
-                    Cookie = item.Cookie,
+                    //Cookie = item.Cookie,
                     CookieId = item.Cookie.Id
                 });
             }
 
-            var purcase = await _accountService.BuyCookie(userId, list);
+            var purcase = await _accountService.BuyCart(userId, list);
             return purcase;
 
         }
@@ -116,6 +116,19 @@ namespace CookieShop.API.Controllers
 
         }
 
+
+        [Authorize]
+        [HttpPost("buy-cookie")]
+        public async Task<PurchaseHistory> Buy([FromBody] Cookie purchaseCookieBody)
+        {
+            var token = Request.Headers["Authorization"][0]
+           .Substring("Bearer ".Length);
+            var userId = int.Parse(_tokenService.GetClaim(token, "nameid"));
+
+            var purcase = await _accountService.BuyCookie(userId, purchaseCookieBody, 1);
+            return purcase;
+
+        }
         public class UserInfoResponse
         {
             public double Balance { get;  set; }

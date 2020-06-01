@@ -5,7 +5,7 @@ import { useAuth } from '../context/authcontext';
 import {CartContext} from '../context/cartcontext'
 const CartCard = ({ cartItem }) => {
     const { authTokens } = useAuth();
-    const {cartItems, setCartItems} = useContext(CartContext);
+    // const {cartItems, setCartItems} = useContext(CartContext);
 
     const options = {
         headers: {
